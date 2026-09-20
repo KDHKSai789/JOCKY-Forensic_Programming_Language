@@ -1,0 +1,14 @@
+CASE "Suspicious_Process_Test"
+TARGET "LOCAL"
+
+COLLECT processes
+COLLECT filesystem.recent
+
+ANALYZE processes
+ANALYZE filesystem.recent
+
+LET suspicious_temp_procs = ANALYZE processes WHERE (executable MATCHES "/tmp/")
+
+TIMELINE
+VERIFY evidence
+REPORT "suspicious_test_report.json"

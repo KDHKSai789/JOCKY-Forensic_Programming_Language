@@ -1,0 +1,40 @@
+# Full JOCKY Investigation Script
+# Demonstrates all language features including parenthesized conditions
+
+CASE "SIH_Demo"
+TARGET "LOCAL"
+
+# ── Phase 1: Data Collection ──────────────────────────────
+COLLECT processes
+COLLECT network.connections
+COLLECT filesystem.recent
+COLLECT memory.indicators
+COLLECT drivers
+
+# ── Phase 2: Core Analysis ────────────────────────────────
+ANALYZE processes
+ANALYZE network.connections
+ANALYZE filesystem.recent
+ANALYZE memory.indicators
+
+# ── Phase 3: Filtered LET Variables ───────────────────────
+# Triage filters: candidates require analyst verification and do not raise risk alone.
+LET process_review_candidates = ANALYZE processes WHERE threads > 20 AND pid > 100
+LET elevated_thread_candidates = ANALYZE processes WHERE (threads > 30 OR cpu > 80) AND pid != 1
+LET root_owned_processes = ANALYZE processes WHERE uid == root
+
+# ── Phase 4: IOC Search ───────────────────────────────────
+SEARCH ioc FROM "iocs.txt"
+
+# ── Phase 5: Cross-Source Correlation ─────────────────────
+CORRELATE processes WITH network.connections
+CORRELATE processes WITH filesystem.recent
+
+# ── Phase 6: Timeline ─────────────────────────────────────
+TIMELINE
+
+# ── Phase 7: Evidence Verification ───────────────────────
+VERIFY evidence
+
+# ── Phase 8: Report ───────────────────────────────────────
+REPORT "demo_report.json"

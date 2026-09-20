@@ -1,0 +1,11 @@
+CASE "LOGIC_TEST"
+
+TARGET "LOCAL"
+
+COLLECT processes
+
+LET and_test = ANALYZE processes WHERE threads > 1 AND pid > 1000
+
+LET or_test = ANALYZE processes WHERE threads > 1 OR pid > 1000
+
+REPORT "logic_test_result.json"

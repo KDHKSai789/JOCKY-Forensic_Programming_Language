@@ -1,0 +1,9 @@
+CASE "CONDITIONAL_TEST"
+
+TARGET "LOCAL"
+
+COLLECT processes
+
+LET suspicious = ANALYZE processes WHERE threads > 1
+
+REPORT "conditional_result.json"

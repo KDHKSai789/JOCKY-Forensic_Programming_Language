@@ -1,0 +1,23 @@
+CASE "FULL_FORENSIC_TEST"
+
+TARGET "LOCAL"
+
+COLLECT processes
+COLLECT network.connections
+COLLECT filesystem.recent
+COLLECT memory.indicators
+
+ANALYZE processes
+ANALYZE network.connections
+ANALYZE filesystem.recent
+ANALYZE memory
+
+SEARCH ioc FROM "iocs.txt"
+
+CORRELATE processes WITH network.connections
+
+TIMELINE
+
+VERIFY evidence
+
+REPORT "full_forensic_result.json"
